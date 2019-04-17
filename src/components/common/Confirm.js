@@ -1,55 +1,53 @@
 import React from 'react';
-import { Text, View, Modal } from 'react-native';
-import { CardSection } from './CardSection';
-import { Button } from './Button';
+import { Text, View, Modal, Button, StatusBar } from 'react-native';
 
 const Confirm = ({ children, visible, onAccept, onDecline }) => {
-    const { containerStyle, textStyle, cardSectionStyle } = styles;
+    const { containerStyle, textStyle } = styles;
     
     return (
         <Modal
             visible={visible}
             transparent
-            animationType='slide'
+            animationType='fade'
             onRequestClose={() => {}}
         >
+            <StatusBar barStyle='dark-content' />
             <View style={containerStyle}>
-                <CardSection style={cardSectionStyle}>
-                    <Text style={textStyle}>
-                        {children}
-                    </Text>
-                </CardSection>
-                <CardSection style={cardSectionStyle}>
+                <Text style={textStyle}>
+                    {children}
+                </Text>
+                <View style={{ padding: 10, width: 120, alignSelf: 'center' }}>
                     <Button
-                        label='YES'
+                        title='YES'
+                        color='#F4281F'
                         onPress={onAccept}
                     />
+                </View>
+                <View style={{ padding: 10, width: 120, alignSelf: 'center', }}>
                     <Button
-                        label='NO'
+                        title='NO'
+                        color='#F4281F'
                         onPress={onDecline}
                     />
-                </CardSection>
+                </View>
             </View>
         </Modal>
     );
 };
 
 const styles = {
-    cardSectionStyle: {
-        justifyContent: 'center'
-    },
-    textStyle: {
-        flex: 1,
-        fontSize: 18,
-        textAlign: 'center',
-        lineHeight: 40
-    },
     containerStyle: {
-        backgroundColor: 'rgba(0, 0, 0, 0.75)',
+        backgroundColor: '#fff',
         position: 'relative',
         flex: 1,
         justifyContent: 'center'
-    }
+    },
+    textStyle: {
+        fontSize: 18,
+        textAlign: 'center',
+        lineHeight: 40,
+        padding: 20
+    },
 };
 
 export { Confirm };

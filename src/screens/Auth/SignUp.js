@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet, TouchableWithoutFeedback } from 'react-native';
 import { connect } from 'react-redux';
-import { loginUser } from '../actions';
-import { Card, CardSection, Input, Button, Spinner } from './common';
+import { Card, CardSection, Input, Button, Head, Spinner } from '../../components/common';
+import { registerUser, loginUser } from '../../actions';
 
-class LoginForm extends Component {
+class SignUp extends Component {
+    static navigationOptions = {
+        header: null
+    }
+
     state = {
         email: '',
         password: ''
@@ -25,19 +29,12 @@ class LoginForm extends Component {
     onButtonPress() {
         const { email, password } = this.state;
 
-        this.props.loginUser({ email, password });
-    }
-        
-    renderError() {
-        if (this.props.error) {
-            return (
-                <View style={{ backgroundColor: 'white' }}>
-                    <Text style={styles.errorTextStyle}>
-                        {this.props.error}
-                    </Text>
-                </View>
-            );
-        }
+        this.props.registerUser({ email, password })
+            .then(() => {
+                this.props.loginUser({ email, password });
+                navigation.navigate('Home');                
+            })
+            .catch(() => null);
     }
 
     renderButton() {
@@ -47,16 +44,20 @@ class LoginForm extends Component {
         
         return (
             <Button
-                label='LOGIN'
+                label='Register'
                 onPress={this.onButtonPress.bind(this)}
-            />            
+            />        
         );
     }
 
     render() {
         return (
             <View style={styles.container}>
-                <Text>{this.props.error}</Text>
+                <Head
+                    title='SIGN UP'
+                    icon='ios-home'
+                    onPress={() => this.props.navigation.navigate('Welcome')}
+                />
                 <Card>
                     <CardSection>
                         <Input
@@ -74,16 +75,19 @@ class LoginForm extends Component {
                         />
                     </CardSection>
                     <CardSection>
-                        <Button
-                            label='Enter'
-                        />
+                        {this.renderButton()}
                     </CardSection>
                     <CardSection>
-                        <Text>{this.state.email}</Text>
-                        <Text>{this.state.password}</Text>
+                        <Text style={styles.errorTextStyle}>
+                            {this.props.error ? this.props.error : ' '}
+                        </Text>
                     </CardSection>
                     <CardSection>
-                        {this.props.error}
+                        <TouchableWithoutFeedback
+                            onPress={() => this.props.navigation.navigate('Login')}
+                        >
+                            <Text>Already have an account? Sign in here.</Text>
+                        </TouchableWithoutFeedback>
                     </CardSection>
                 </Card>
             </View>
@@ -93,9 +97,9 @@ class LoginForm extends Component {
 
 const styles = StyleSheet.create({
     container: {
-      backgroundColor: '#C7EFCF',
+      //backgroundColor: '#C7EFCF',
       flex: 1,
-      paddingTop: 150,
+      justifyContent: 'center'
     },
     errorTextStyle: {
         fontSize: 20,
@@ -106,13 +110,9 @@ const styles = StyleSheet.create({
   });
 
 const mapStateToProps = store => {
-    const { error, loading } = store.auth;
-    console.log(error);
+    const { user, error, loading } = store.auth;
 
-    return { error, loading };
+    return { user, error, loading };
 };
-
-LoginForm.navigationOptions = { title: 'LOGIN' };
-
-export default connect(mapStateToProps, { loginUser })(LoginForm);
-//export default LoginForm;
+  
+export default connect(mapStateToProps, { registerUser, loginUser })(SignUp);

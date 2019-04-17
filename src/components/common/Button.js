@@ -13,19 +13,16 @@ const Button = ({ onPress, label }) => {
 
 const styles = StyleSheet.create({
     textStyle: {
-        color: '#0C2A08',
+        color: '#fff',
         fontSize: 16,
         fontWeight: '600',
         padding: 10,
         textAlign: 'center'
     },
     buttonStyle: {
-        flex: 1,
-        alignSelf: 'center',
-        backgroundColor: '#ACC8A8',
-        borderRadius: 5,
-        borderWidth: 1,
-        borderColor: '#0C2A08'
+        backgroundColor: '#F4281F'/*'#164C0D'*/,
+        borderRadius: 4,
+        flex: 0.35,
     }
 });
 

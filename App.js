@@ -4,19 +4,12 @@ import firebase from 'firebase';
 import { StyleSheet, View } from 'react-native';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
-import { createStackNavigator, createAppContainer } from 'react-navigation';
+import AppNavigator from './src/navigation/AppNavigator';
 import reducers from './src/reducers';
-import LoginForm from './src/components/LoginForm';
-import RegisterForm from './src/RegisterForm';
-import { Header, Card, CardSection, Button } from './src/components/common';
 
 const store = createStore(reducers, {}, applyMiddleware(ReduxThunk));
 
 class App extends Component {
-  static navigationOptions = {
-    header: null
-  }
-
   componentWillMount() {
     const config = {
       apiKey: 'AIzaSyBJzdczECw0b49Pq5gpytBET1TRYkf3gSo',
@@ -32,29 +25,11 @@ class App extends Component {
 
   render() {
     return (
-      <Provider store={store}>
-        <View style={styles.container}>
-          <Card>
-            <Header
-              headerText='WELCOME TO YOUR BEST NEWS APP!'
-            />
-            <CardSection>
-              <Button
-                style={{ height: 20 }}
-                label='LOGIN'
-                onPress={() => this.props.navigation.navigate('Login')}
-              />
-            </CardSection>
-            <CardSection>
-              <Button
-                style={{ height: 20 }}
-                label='REGISTER'
-                onPress={() => this.props.navigation.navigate('Register')}
-              />
-            </CardSection>
-          </Card>
-        </View>
-      </Provider>
+        <Provider store={store}>
+          <View style={styles.container}>
+            <AppNavigator />
+          </View>
+        </Provider>
     );
   }
 }
@@ -62,14 +37,27 @@ class App extends Component {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#C7EFCF',
-    flex: 1
+    flex: 1,
+    justifyContent: 'center'
   },
 });
-
+/*
 const AppNavigator = createStackNavigator({
-  Home: { screen: App, },
-  Login: { screen: LoginForm },
-  Register: { screen: RegisterForm }
+  Index: { screen: App, },
+  Login: {
+    screen: LoginForm,
+    navigationOptions: {
+      headerLeft: null
+    }
+  },
+  Register: { screen: RegisterForm },
+  Home: {
+    screen: HomePage,
+    navigationOptions: {
+      title: 'HOME',
+    }
+  }
 });
 
-export default createAppContainer(AppNavigator);
+export default createAppContainer(AppNavigator);*/
+export default App;
